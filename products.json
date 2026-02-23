@@ -1,0 +1,22 @@
+[
+  { "name": "Dairy Milk", "price": 50, "barcode": "8901234567890" },
+  { "name": "KitKat", "price": 30, "barcode": "8909876543210" },
+  { "name": "Snickers", "price": 40, "barcode": "8904567890123" },
+  { "name": "5 Star", "price": 20, "barcode": "8903210987654" },
+  { "name": "Pepsi 500ml", "price": 45, "barcode": "8902345678901" },
+  { "name": "Coca Cola 500ml", "price": 45, "barcode": "8903456789012" },
+  { "name": "Parle-G Biscuits", "price": 10, "barcode": "8905678901234" },
+  { "name": "Maggi Noodles", "price": 15, "barcode": "8906789012345" },
+  { "name": "Aashirvaad Atta 5kg", "price": 250, "barcode": "8907890123456" },
+  { "name": "Fortune Sunflower Oil 1L", "price": 130, "barcode": "8908901234567" },
+  { "name": "Tata Salt 1kg", "price": 20, "barcode": "8909012345678" },
+  { "name": "Lays Chips Classic Salted", "price": 20, "barcode": "8910123456789" },
+  { "name": "Good Day Cookies", "price": 25, "barcode": "8911234567890" },
+  { "name": "Nestle Milk 1L", "price": 60, "barcode": "8912345678901" },
+  { "name": "Dettol Handwash 200ml", "price": 50, "barcode": "8913456789012" },
+  { "name": "Lifebuoy Soap", "price": 25, "barcode": "8914567890123" },
+  { "name": "Harpic Toilet Cleaner 500ml", "price": 85, "barcode": "8915678901234" },
+  { "name": "Colgate Toothpaste 100g", "price": 55, "barcode": "8916789012345" },
+  { "name": "Surf Excel Detergent 1kg", "price": 110, "barcode": "8917890123456" },
+  { "name": "Vim Bar", "price": 10, "barcode": "8918901234567" }
+]

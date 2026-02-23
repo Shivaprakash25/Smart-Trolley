@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Smart Shopping Trolley</title>
+  <style>
+    /* Existing CSS — remains unchanged, as requested */
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #f4f7fa;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+
+    header {
+      font-size: 36px;
+      font-weight: bold;
+      color: #0066cc;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .container {
+      display: flex;
+      justify-content: space-around;
+      align-items: flex-start;
+      width: 80%;
+      max-width: 1200px;
+      margin: 20px;
+      background-color: #fff;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+    }
+
+    .video-stream {
+      flex: 1;
+      text-align: center;
+    }
+
+    #webcam-feed {
+      width: 100%;
+      max-width: 400px;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      display: none;
+    }
+
+    #start-shopping-button, #stop-shopping-button {
+      padding: 12px 25px;
+      font-size: 16px;
+      background-color: #0066cc;
+      color: white;
+      border: none;
+      border-radius: 30px;
+      cursor: pointer;
+      margin-top: 20px;
+      transition: background-color 0.3s ease;
+    }
+
+    #start-shopping-button:hover, #stop-shopping-button:hover {
+      background-color: #004d99;
+    }
+
+    #stop-shopping-button {
+      display: none;
+    }
+
+    .cart-section {
+      flex: 1;
+      padding: 20px;
+      background-color: #f9f9f9;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      margin-left: 20px;
+      width: 300px;
+    }
+
+    h2 {
+      color: #333;
+      font-size: 22px;
+      margin-bottom: 20px;
+    }
+
+    ul {
+      list-style-type: none;
+      padding: 0;
+    }
+
+    #cart-list li {
+      padding: 10px;
+      margin-bottom: 10px;
+      background-color: #f1f1f1;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .qty-buttons {
+      display: flex;
+      align-items: center;
+    }
+
+    .qty-buttons button {
+      padding: 6px 12px;
+      background-color: #0066cc;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      cursor: pointer;
+      margin: 0 5px;
+      transition: background-color 0.3s ease;
+    }
+
+    .qty-buttons button:hover {
+      background-color: #004d99;
+    }
+
+    #total {
+      font-size: 20px;
+      font-weight: bold;
+      color: #0066cc;
+      margin-top: 20px;
+    }
+
+    #qr-image img {
+      width: 100%;
+      max-width: 250px;
+      margin-top: 20px;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .thank-you {
+      display: none;
+      background-color: #e0f7fa;
+      padding: 20px;
+      text-align: center;
+      border-radius: 10px;
+      margin-top: 30px;
+      font-size: 18px;
+      color: #0066cc;
+    }
+
+    #exit-button {
+      display: none;
+      padding: 12px 25px;
+      background-color: #ff5722;
+      color: white;
+      border: none;
+      border-radius: 30px;
+      cursor: pointer;
+      margin-top: 20px;
+      font-size: 16px;
+      transition: background-color 0.3s ease;
+    }
+
+    #exit-button:hover {
+      background-color: #e64a19;
+    }
+
+    #history-modal {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: white;
+      border-radius: 10px;
+      padding: 20px;
+      width: 400px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+      z-index: 1000;
+    }
+
+    #history-modal h3 {
+      font-size: 24px;
+      color: #0066cc;
+    }
+
+    #history-list {
+      list-style-type: none;
+      padding: 0;
+    }
+
+    #history-list li {
+      padding: 10px;
+      margin: 10px 0;
+      background-color: #f1f1f1;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    button {
+      padding: 8px 16px;
+      background-color: #0066cc;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #004d99;
+    }
+  </style>
+</head>
+<body>
+
+  <header>🛒 Smart Shopping Trolley</header>
+
+  <div class="container">
+    <div class="video-stream">
+      <h2>Live Scanner</h2>
+      <img id="webcam-feed" src="{{ url_for('video_feed') }}" alt="Webcam Feed">
+      <button id="start-shopping-button">Start Shopping</button>
+      <button id="stop-shopping-button">Stop Shopping</button>
+    </div>
+
+    <div class="cart-section">
+      <h2>🧾 Cart</h2>
+      <ul id="cart-list"></ul>
+      <div id="total">Total: ₹0</div>
+      <button id="generateQR">Checkout with UPI</button>
+      <div id="qr-image"></div>
+    </div>
+  </div>
+
+  <div class="thank-you" id="thank-you-message">
+    Thank you for shopping with us! 🙏
+  </div>
+
+  <button id="exit-button">Exit</button>
+  <button id="view-history" onclick="viewHistory()">View Payment History</button>
+
+  <div id="history-modal">
+    <h3>Payment History</h3>
+    <ul id="history-list"></ul>
+    <button onclick=" closeHistory() ">Close</button>
+  </div>
+
+  <script>
+    let cartData = {};
+    let totalAmount = 0;
+
+    async function updateCart() {
+      const res = await fetch("/cart");
+      const items = await res.json();
+
+      cartData = {};
+      items.forEach(item => {
+        if (!cartData[item.barcode]) {
+          cartData[item.barcode] = { ...item, qty: 1 };
+        } else {
+          cartData[item.barcode].qty += 1;
+        }
+      });
+
+      renderCart();
+    }
+
+    function renderCart() {
+      const cartList = document.getElementById("cart-list");
+      cartList.innerHTML = "";
+      let total = 0;
+
+      for (const barcode in cartData) {
+        const item = cartData[barcode];
+        const li = document.createElement("li");
+
+        li.innerHTML = `
+          <span>${item.name} - ₹${item.price}</span>
+          <div class="qty-buttons">
+            <button onclick="changeQty('${barcode}', -1)">-</button>
+            <span>${item.qty}</span>
+            <button onclick="changeQty('${barcode}', 1)">+</button>
+          </div>
+          <button onclick="removeItem('${barcode}')">Delete</button>
+        `;
+        cartList.appendChild(li);
+        total += item.qty * item.price;
+      }
+
+      document.getElementById("total").textContent = "Total: ₹" + total;
+      totalAmount = total;
+    }
+
+    function changeQty(barcode, change) {
+      fetch('/update_quantity', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 'barcode': barcode, 'change': change })
+      })
+      .then(res => res.json())
+      .then(data => {
+        cartData = data.cart;
+        renderCart();
+      });
+    }
+
+    function removeItem(barcode) {
+      fetch('/remove_from_cart', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 'barcode': barcode })
+      })
+      .then(() => updateCart());
+    }
+
+    setInterval(updateCart, 2000);
+
+    document.getElementById("generateQR").addEventListener("click", async () => {
+      if (totalAmount > 0) {
+        const res = await fetch(`/generate_upi_qr?amount=${totalAmount}`);
+        const blob = await res.blob();
+        const url = URL.createObjectURL(blob);
+        document.getElementById("qr-image").innerHTML = `<img src="${url}" alt="QR Code">`;
+        document.getElementById("thank-you-message").style.display = 'block';
+        document.getElementById("exit-button").style.display = 'block';
+      } else {
+        alert("Cart is empty!");
+      }
+    });
+
+    document.getElementById("exit-button").addEventListener("click", () => {
+      location.reload();
+    });
+
+    function viewHistory() {
+      fetch('/get_payment_history')
+        .then(res => res.json())
+        .then(data => {
+          const list = document.getElementById("history-list");
+          list.innerHTML = '';
+          data.forEach(entry => {
+            const li = document.createElement("li");
+            li.textContent = `Timestamp: ${entry.timestamp}, Total: ₹${entry.total}`;
+            list.appendChild(li);
+          });
+          document.getElementById("history-modal").style.display = 'block';
+        });
+    }
+
+    function closeHistory() {
+      document.getElementById("history-modal").style.display = 'none';
+    }
+
+    document.getElementById("start-shopping-button").addEventListener("click", () => {
+      document.getElementById("webcam-feed").style.display = 'block';
+      document.getElementById("start-shopping-button").style.display = 'none';
+      document.getElementById("stop-shopping-button").style.display = 'inline-block';
+    });
+
+    document.getElementById("stop-shopping-button").addEventListener("click", () => {
+      document.getElementById("webcam-feed").style.display = 'none';
+      document.getElementById("stop-shopping-button").style.display = 'none';
+      document.getElementById("start-shopping-button").style.display = 'inline-block';
+    });
+  </script>
+
+</body>
+</html>

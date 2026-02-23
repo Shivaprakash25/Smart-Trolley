@@ -1,0 +1,8 @@
+flask
+opencv-python
+pyzbar
+qrcode
+pillow
+torchvision
+sql
+sql.connector
